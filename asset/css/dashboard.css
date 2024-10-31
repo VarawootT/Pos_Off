@@ -1,0 +1,59 @@
+body {
+    font-family: 'Kanit', sans-serif;
+}
+
+.contentLogo {
+    width: 100%;
+    height: auto;
+    padding: 0px;
+    margin: 0px;
+}
+
+.centerlogo {
+    /* height: 60%; */
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    margin: 0px;
+    /* background-image: url("../../images/login/bg_home.jpg"); */
+}
+
+
+/*========= Menu Bottom =========*/
+
+.btn-ct {
+    display: block;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 0.3rem;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    box-shadow: none;
+    text-align: center;
+}
+
+.btn-up {
+    display: block;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 0.3rem;
+    color: #fff;
+    background-color: #138496;
+    border-color: #138496;
+    box-shadow: none;
+    text-align: center;
+}
+
+
+/* element.style {
+    min-height: 0px !important;
+} */
