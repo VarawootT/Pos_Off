@@ -5,7 +5,7 @@ date_default_timezone_set('Asia/Bangkok');
 $mysqli = new mysqli('localhost', 'root', 'root', 'pos');
 mysqli_set_charset($mysqli, 'utf8');
 
-//-----------------Connect MYSQL -----------------
+//-----------------Connect MYSQL pos.summitfootwear.co.th-----------------
 
 // $mysqliA = new mysqli('pos.summitfootwear.co.th', 'root', 'root', 'pos', '9090');
 // mysqli_set_charset($mysqliA, 'utf8');
