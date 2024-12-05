@@ -154,10 +154,39 @@ if ($result = $mysqli->query($qry)) {
 
 	function pause() {
 		let i_NOTE = $("#i_NOTE").val()
+
 		$.ajax({
 			type: "PAUSE",
 			url: "ajax_pos.php?MODE=pause&i_NOTE=" + i_NOTE,
 			success: function(data) {
+				window.location.href = "index.php?link=frm_in_pos";
+			},
+			error: function(xhr, status, exception) {
+				alert(status);
+			}
+		});
+	}
+
+	// -----------------------comeback
+
+	function comeback() {
+		let i_NOTE = $("#i_NOTEC").val()
+		let tableRows = $("#myTableBody tr").length;
+		console.log(tableRows);
+		if(i_NOTE == ""){
+			alert("โปรดเลือกรายการก่อนครับ")
+			return;
+		}
+		if (tableRows > 2) {
+        alert("มีข้อมูลในตารางอยู่แล้ว");
+        return;
+		}
+
+		$.ajax({
+			type: "PUT",
+			url: "ajax_pos.php?MODE=comeback&i_NOTE=" + i_NOTE,
+			success: function(data) {
+				//console.log(data);
 				window.location.href = "index.php?link=frm_in_pos";
 			},
 			error: function(xhr, status, exception) {
@@ -325,7 +354,7 @@ function inputnum(value, sum_net) {
 							<th style="width: 110px;"><small><b>เลือกรายการ</b></small></th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="myTableBody">
 						<?php
 
 						$i = 1;
@@ -789,13 +818,25 @@ function inputnum(value, sum_net) {
 
 											<div class="form-group row">
 												<label for="i_NOTE" class="col-sm-4 col-form-label text-right mt-1">ชื่อรายการ :</label>
-												<div class="col-sm-7"><input type="text" class="form-control form-control-sm mt-2" placeholder="ชื่อรายการ" id="i_NOTE"></div>
+												<div class="col-sm-7">
+												
+													<select name="i_NOTEC" id="i_NOTEC" class="form-control form-control-sm mt-2">
+														<option value="">เลือกรายการที่ต้องการ</option>
+														<?php
+														$pause_sql = $mysqli->query("SELECT * FROM p_so_pause_h");
+														while($pause_row = $pause_sql->fetch_assoc()){
+															echo "<option value='".$pause_row['no']."'>".$pause_row['name']."</option>";
+														}
+														?>
+													</select>
+													
+												</div>
 												<div class="col-sm-1"></div>
 											</div>
 
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-												<button type="button" class="btn btn-primary" id="sub_pause" onClick="pause()">OK</button>
+												<button type="button" class="btn btn-primary" id="sub_pause" onClick="comeback()">OK</button>
 											</div>
 										</div>
 									</div>
@@ -889,31 +930,31 @@ function inputnum(value, sum_net) {
 		}
 	}
 
-	function checkInputOnEnter() {
-		let inputValue = document.getElementById('exampleDataList').value.toLowerCase(); // แปลงค่าที่กรอกเป็นตัวพิมพ์เล็ก
-		let datalistOptions = document.querySelectorAll('#i_BAR option');
+	// function checkInputOnEnter() {
+	// 	let inputValue = document.getElementById('exampleDataList').value.toLowerCase(); // แปลงค่าที่กรอกเป็นตัวพิมพ์เล็ก
+	// 	let datalistOptions = document.querySelectorAll('#i_BAR option');
 
-		// ตัวแปรเพื่อตรวจสอบว่าค่าที่กรอกตรงกับตัวเลือกใน datalist หรือไม่
-		let matchFound = false;
+	// 	// ตัวแปรเพื่อตรวจสอบว่าค่าที่กรอกตรงกับตัวเลือกใน datalist หรือไม่
+	// 	let matchFound = false;
 
-		// ตรวจสอบว่าค่าที่กรอกตรงกับตัวเลือกใน datalist หรือไม่
-		for (let option of datalistOptions) {
-			let optionValue = option.value.toLowerCase();
-			let optionBar = option.getAttribute('data-bar').toLowerCase();
+	// 	// ตรวจสอบว่าค่าที่กรอกตรงกับตัวเลือกใน datalist หรือไม่
+	// 	for (let option of datalistOptions) {
+	// 		let optionValue = option.value.toLowerCase();
+	// 		let optionBar = option.getAttribute('data-bar').toLowerCase();
 
-			if (optionValue.includes(inputValue) || optionBar.includes(inputValue)) {
-				matchFound = true; // ตั้งค่าว่าพบการจับคู่
-				break;
-			}
-		}
+	// 		if (optionValue.includes(inputValue) || optionBar.includes(inputValue)) {
+	// 			matchFound = true; // ตั้งค่าว่าพบการจับคู่
+	// 			break;
+	// 		}
+	// 	}
 
-		// หากมีการพิมพ์และตรงกับตัวเลือกใน datalist
-		if (matchFound) {
-			// add(1); // เรียกฟังก์ชัน add เมื่อมีการจับคู่
-		} else {
-			alert("ไม่พบรหัสสินค้า !!!");
-		}
-	}
+	// 	// หากมีการพิมพ์และตรงกับตัวเลือกใน datalist
+	// 	if (matchFound) {
+	// 		// add(1); // เรียกฟังก์ชัน add เมื่อมีการจับคู่
+	// 	} else {
+	// 		alert("ไม่พบรหัสสินค้า !!!");
+	// 	}
+	// }
 
 	// ฟังก์ชันสำหรับตรวจสอบเมื่อเลือกจาก datalist เท่านั้น
 	function checkDatalistOnSelect() {
@@ -933,7 +974,7 @@ function inputnum(value, sum_net) {
 	// ตรวจสอบเมื่อผู้ใช้กดปุ่ม Enter
 	document.getElementById("exampleDataList").addEventListener("keypress", function(event) {
 		if (event.key === 'Enter') { // ตรวจสอบว่ากด Enter หรือไม่
-			checkInputOnEnter(); // เรียกใช้ฟังก์ชันเมื่อกด Enter
+			checkDatalistOnSelect(); // เรียกใช้ฟังก์ชันเมื่อกด Enter
 		}
 	});
 

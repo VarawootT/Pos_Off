@@ -238,7 +238,7 @@ if (isset($_GET['MODE']))
 
         $IN_NO = $SE_NO+1;
 
-        $sql_p = "SELECT pn, price FROM p_so_tem WHERE iduser = '$user_id' ";
+        $sql_p = "SELECT pn, price,qty FROM p_so_tem WHERE iduser = '$user_id' ";
         $query_p = mysqli_query($mysqli,$sql_p);
         while($row=mysqli_fetch_array($query_p,MYSQLI_ASSOC))
         {
@@ -250,7 +250,7 @@ if (isset($_GET['MODE']))
             $SE_WH = $row['wh'];
             					
             $i_pw="INSERT INTO p_so_pause_d (no, pn, qty, price, discount, iduser, wh)";
-            $i_pw.="VALUES ('$IN_NO','$SE_PN','$i_QTY','$SE_PRICE','$i_DIS','$user_id','$user_wh')";
+            $i_pw.="VALUES ('$IN_NO','$SE_PN','$SE_QTY','$SE_PRICE','$i_DIS','$user_id','$user_wh')";
             $mysqli->query($i_pw);
         }
 
@@ -261,7 +261,22 @@ if (isset($_GET['MODE']))
         $d_sql = "DELETE FROM p_so_tem WHERE iduser = '$user_id' ";
         $mysqli->query($d_sql);
     }
+    // ----------------------------comeback
+    if ($_GET['MODE'] == 'comeback')
+    {
+        $u_NOTE = $_GET['i_NOTE'];
 
+        $c_back = "INSERT INTO p_so_tem (iduser, pn, qty, price, wh) SELECT iduser, pn, qty, price, wh FROM p_so_pause_d WHERE no = '$u_NOTE'";
+        echo $c_back;
+        $mysqli->query($c_back);
+
+        $d_sql1 = "DELETE FROM p_so_pause_h WHERE no = '$u_NOTE' ";
+        $mysqli->query($d_sql1);
+
+        $d_sql2 = "DELETE FROM p_so_pause_d WHERE no = '$u_NOTE' ";
+        $mysqli->query($d_sql2);
+
+    }
 //------------------------------- Print
 if ($_GET['MODE'] == 'print')
 {
