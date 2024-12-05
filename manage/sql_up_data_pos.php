@@ -15,8 +15,8 @@ include_once("../config.php");
 <?php
 //-----------------Connect MSSQL 14 db_Aerosoft_ERP-----------------
 
-//$serverName = '192.168.0.14';
-$serverName = '110.164.127.170';
+$serverName = '192.168.0.14';
+//$serverName = '110.164.127.170';
 $userName = 'Aero';
 $userPassword = '1stLogin';
 $dbName = 'db_Aerosoft_ERP';
